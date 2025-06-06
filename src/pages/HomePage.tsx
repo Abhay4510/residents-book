@@ -16,10 +16,20 @@ const HomePage = ({ residents, loading, onResidentAdded }: HomePageProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
   const [selectedResidentId, setSelectedResidentId] = useState<string | null>(null)
+  const [newResidentId, setNewResidentId] = useState<string | null>(null)
 
   const handleResidentClick = (residentId: string) => {
     setSelectedResidentId(residentId)
     setIsDetailModalOpen(true)
+  }
+
+  const handleResidentAdded = (resident: Resident) => {
+    onResidentAdded(resident)
+    setNewResidentId(resident._id)
+
+    setTimeout(() => {
+      setNewResidentId(null)
+    }, 5000)
   }
 
   return (
@@ -45,11 +55,16 @@ const HomePage = ({ residents, loading, onResidentAdded }: HomePageProps) => {
             </p>
           </div>
 
-          <ResidentList residents={residents} loading={loading} onResidentClick={handleResidentClick} />
+          <ResidentList
+            residents={residents}
+            loading={loading}
+            onResidentClick={handleResidentClick}
+            newResidentId={newResidentId}
+          />
         </div>
       </motion.section>
 
-      <ResidentModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onResidentAdded={onResidentAdded} />
+      <ResidentModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onResidentAdded={handleResidentAdded} />
 
       <ResidentDetailModal
         isOpen={isDetailModalOpen}

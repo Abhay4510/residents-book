@@ -80,6 +80,18 @@ const ResidentModal = ({ isOpen, onClose, onResidentAdded }: ResidentModalProps)
     return Object.keys(newErrors).length === 0
   }
 
+  const scrollToCommunity = () => {
+    setTimeout(() => {
+      const communitySection = document.getElementById("residents")
+      if (communitySection) {
+        communitySection.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        })
+      }
+    }, 500) // Small delay to ensure the modal closes first
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -101,7 +113,7 @@ const ResidentModal = ({ isOpen, onClose, onResidentAdded }: ResidentModalProps)
 
       const response = await createResident(formDataToSend)
 
-      toast.success("Welcome to the community! 🎉")
+      toast.success("Welcome to the community! 🎉 Redirecting to view your profile...")
       onResidentAdded(response.data.resident)
 
       // Reset form
@@ -116,6 +128,8 @@ const ResidentModal = ({ isOpen, onClose, onResidentAdded }: ResidentModalProps)
       setImagePreview(null)
       setErrors({})
       onClose()
+
+      scrollToCommunity()
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Something went wrong")
     } finally {
@@ -245,7 +259,7 @@ const ResidentModal = ({ isOpen, onClose, onResidentAdded }: ResidentModalProps)
                     name="title"
                     value={formData.title}
                     onChange={handleInputChange}
-                    // placeholder="e.g., Software Engineer, Designer, Entrepreneur"
+                    placeholder="e.g., Software Engineer, Designer, Entrepreneur"
                     disabled={loading}
                     className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-black transition-colors ${
                       errors.title ? "border-red-500" : "border-gray-200 focus:border-black"

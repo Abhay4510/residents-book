@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import ResidentCard from "./ResidentCard"
 import type { Resident } from "../types/resident"
@@ -8,11 +8,18 @@ interface ResidentListProps {
   residents: Resident[]
   loading: boolean
   onResidentClick: (residentId: string) => void
+  newResidentId?: string | null 
 }
 
-const ResidentList = ({ residents, loading, onResidentClick }: ResidentListProps) => {
+const ResidentList = ({ residents, loading, onResidentClick, newResidentId }: ResidentListProps) => {
   const [currentPage, setCurrentPage] = useState(1)
   const residentsPerPage = 12
+
+  useEffect(() => {
+    if (newResidentId) {
+      setCurrentPage(1)
+    }
+  }, [newResidentId])
 
   const totalPages = Math.ceil(residents.length / residentsPerPage)
   const startIndex = (currentPage - 1) * residentsPerPage
@@ -52,6 +59,7 @@ const ResidentList = ({ residents, loading, onResidentClick }: ResidentListProps
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
+            className={`${newResidentId === resident._id ? "ring-4 ring-green-400 ring-opacity-50 rounded-2xl" : ""}`}
           >
             <ResidentCard resident={resident} onClick={() => onResidentClick(resident._id)} />
           </motion.div>

@@ -245,7 +245,7 @@ const ResidentModal = ({ isOpen, onClose, onResidentAdded }: ResidentModalProps)
                     name="title"
                     value={formData.title}
                     onChange={handleInputChange}
-                    placeholder="e.g., Software Engineer, Designer, Entrepreneur"
+                    // placeholder="e.g., Software Engineer, Designer, Entrepreneur"
                     disabled={loading}
                     className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-black transition-colors ${
                       errors.title ? "border-red-500" : "border-gray-200 focus:border-black"
